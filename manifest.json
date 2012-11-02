@@ -1,0 +1,27 @@
+/*
+Copyright Phiveleven LLC
+phiveleven.com
+*/
+
+{
+	"name": "Mem",
+	"version": "0.1",
+	"manifest_version": 2,
+
+	"description":"Organized recollection",
+	/* "homepage_url": "https://phiveleven.com/mem", */
+	/* "update_url": "https://phiveleven.com/mem/update.xml", */
+	"icons": {
+		"128": "html/img/mem.png" },
+
+	"browser_action": {
+		"default_icon": "html/img/mem.png",
+		"default_title": "Mem",
+		"default_popup": "html/home.html" },
+
+	"permissions": [
+		"https://phiveleven.com/" ]
+
+}
+/* http://developer.chrome.com/extensions/manifest.html */
+
