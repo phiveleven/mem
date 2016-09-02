@@ -1,12 +1,44 @@
 <!doctype html>
-<style></style>
+<style>
+* { font:102%/1.6 Avenir,Segoe UI;
+    padding:0; margin:0; border:0 }
 
-<label><input id="search" placeholder="search"></label>
-<div id="bookmarks"></div>
+</style>
 
-<div id="editdialog"></div>
-<div id="deletedialog"></div>
-<div id="adddialog"></div>
+<script src=test.js></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="popup.js"></script>
+
+
+
+
+
+
+
+
+<!--input name=query placeholder="search">
+<menu></menu>
+<script>
+NodeList.prototype.map = [].map;
+NodeList.prototype.reduce = [].reduce;
+
+document.addEventListener('DOMContentLoaded',function(){
+	document.querySelector('[name=query]')
+		.addEventListener('keyup', function(){
+			// developer.chrome.com/extensions/bookmarks
+			chrome.bookmarks.search(this.value, index);
+		});
+});
+
+function index(bookmarks){
+    bookmarks
+        .reduce(function(data, bookmark){
+            var url = bookmark.url;
+            data[url] = data[url]
+                ? data[url].push(bookmark)
+                : [bookmark];
+            return data;
+        }, {});
+
+    console.debug(bookmarks);
+}
+</script-->
