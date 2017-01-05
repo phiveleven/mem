@@ -1,44 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <style>
 * { font:102%/1.6 Avenir,Segoe UI;
     padding:0; margin:0; border:0 }
-
 </style>
 
-<script src=test.js></script>
 
+<table>
+	<thead> <tr data=Bookmarks> <th data-key>
+	<tbody> <tr data=Bookmarks> <td data-value>
+</table>
 
+<script src=test.js?Bookmarks></script>
 
-
-
-
-
-
-
-<!--input name=query placeholder="search">
-<menu></menu>
-<script>
-NodeList.prototype.map = [].map;
-NodeList.prototype.reduce = [].reduce;
-
-document.addEventListener('DOMContentLoaded',function(){
-	document.querySelector('[name=query]')
-		.addEventListener('keyup', function(){
-			// developer.chrome.com/extensions/bookmarks
-			chrome.bookmarks.search(this.value, index);
-		});
-});
-
-function index(bookmarks){
-    bookmarks
-        .reduce(function(data, bookmark){
-            var url = bookmark.url;
-            data[url] = data[url]
-                ? data[url].push(bookmark)
-                : [bookmark];
-            return data;
-        }, {});
-
-    console.debug(bookmarks);
-}
-</script-->
