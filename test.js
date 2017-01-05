@@ -1,15 +1,18 @@
 console.clear();
 
 
-/**/DEV(function(){/**/
+document.addEventListener('DOMContentLoaded', function(){
 
 	chrome.bookmarks.getTree(function(results){
+		// 1. index browser bookmarks
 		var bookmarks = results[0].children.reduce(index, {});
-
 		console.info(bookmarks);
+		// 2. interpolate data into html
+		document.body.appendChild(interpolate(bookmarks));
+		throw 'TODO: append table with data'
 	});
 	
-/**/})();/**/
+});
 
 /* index */
 function index(Bookmarks, bookmark){
@@ -23,6 +26,10 @@ function index(Bookmarks, bookmark){
 			});
 	}
 
+	if (bookmark.host){
+		bookmark.domain = (bookmark.host.match(/[^\.]+\.\w+$/) || [''])[0];
+	}
+
 	for (var key in bookmark){ 
 		var value = bookmark[key];
 
@@ -30,22 +37,32 @@ function index(Bookmarks, bookmark){
 			// flatten
 			Bookmarks = value.reduce(index, Bookmarks);
 		else {
-			Bookmarks[key] = Bookmarks[key] || {};
-			Bookmarks[key][value] = value in Bookmarks[key] ?
-				[bookmark].concat(Bookmarks[key][value])
-				: bookmark;
+			Bookmarks[key] = archive(Bookmarks[key], value, bookmark);
 		}
 	}
 	return Bookmarks;
 }
 
+/* function archive */
+function archive(context, value, item){
+	context = context || {};
+	context[value] = value in context ?
+		[item].concat(context[value])
+		: item;
+	return context;
+}
 
-/** @param f {Function} wrap into a timer/logging function  */
-function DEV(f){
-	return function(){
-		var start = new Date,
-			ret = f(),
-			end = new Date;
-		console.debug(new Date - start + 'ms');
-	};
-}/**/
+/* interpolate */
+function interpolate(data){
+	var thead = document.createElement('thead'),
+		tbody = document.createElement('tbody')
+	for (var column in data){
+		var th = document.createElement('th'),
+			td = document.createElement('td');
+		th.innerText = column;
+		td.innerText = data[column];
+		thead.appendChild(th);
+	}
+	return document.createElement('table');
+}
+
