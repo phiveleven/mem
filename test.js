@@ -3,15 +3,65 @@ console.clear();
 
 document.addEventListener('DOMContentLoaded', function(){
 
-	chrome.bookmarks.getTree(function(results){
-		// 1. index browser bookmarks
-		console.info(Catalog(results[0].children));
+	chrome.bookmarks.getTree(function(tree){
+		var bookmarks = 
+			tree
+			.reduce(flatten, [])
+			// most recent
+			//.sort((a, b) => b.dateAdded - a.dateAdded)
+			// expand url and date
+			.map(expand)
+			// group
+			.reduce(group('host'), {})
+			// dedup
+			//.sort((a,b) => a.url - b.url)
+			//.map(b => b.url)
+			//.reduce(similar, []);
+
+		// truncate for debugging
+		//bookmarks.length = 100;
+		console.log(bookmarks);
+		// Catalog browser bookmarks
+		// console.info(Catalog(tree[0].children));
 	});
 
 });
 
+function group(by){
+	return function(grouped, bookmark){
+		var key = bookmark[by];
+		grouped[key] = grouped[key] || [];
+		grouped[key].push(bookmark);
+		return grouped;
+	}
+}
+/*function similar(bookmark){
+	// identical
 
-
+	// url == url
+	// similar
+	// host pathname search hash
+	return bookmark;
+}*/
+function expand(bookmark){
+	// url
+	var url = document.createElement`a`;
+	url.href = bookmark.url;
+	'protocol host pathname search hash'
+		.split(' ')
+		.forEach(property => bookmark[property] = url[property]);
+	// date
+	bookmark.added = new Date(bookmark.dateAdded);
+	return bookmark;
+}
+function flatten(bookmarks, node){
+	//developer.chrome.com/extensions/bookmarks#type-BookmarkTreeNode
+	if (node.children)
+		bookmarks.concat(node.children.reduce(flatten, bookmarks));
+	else
+		bookmarks.push(node);
+	return bookmarks;
+}
 
 
 
