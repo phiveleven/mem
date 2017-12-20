@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function(){
 			// expand url and date
 			.map(expand)
 			// group
-			.reduce(group('host'), {})
+			.reduce(group('parentTitle'), {})
 			// dedup
 			//.sort((a,b) => a.url - b.url)
 			//.map(b => b.url)
@@ -52,13 +52,22 @@ function expand(bookmark){
 		.forEach(property => bookmark[property] = url[property]);
 	// date
 	bookmark.added = new Date(bookmark.dateAdded);
+	// TLD
+	bookmark.tld = (bookmark.host.match(/[^.]+\.[a-zA-Z]{2,}$/) || [''])[0].replace(/:\d+/,'')
+
 	return bookmark;
 }
 function flatten(bookmarks, node){
 	//developer.chrome.com/extensions/bookmarks#type-BookmarkTreeNode
-	if (node.children)
-		bookmarks.concat(node.children.reduce(flatten, bookmarks));
-	else
+	if (node.children){
+		var parentTitle = node.parentTitle && node.title ? node.parentTitle + ' > ' + node.title : node.title;
+		bookmarks.concat(node.children
+			.map(node => { 
+				node.parentTitle = parentTitle;
+				return node
+			})
+			.reduce(flatten, bookmarks));
+	} else
 		bookmarks.push(node);
 	return bookmarks;
 }
